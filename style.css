@@ -86,10 +86,12 @@ text{
   font-size: 50px;
   font-weight: bold;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  position: absolute;
+  position: relative;
   padding: 0;
+  color:white;
   margin: 0;
-  top:50%;
+  text-align: center;
+  top:10%;
   -webkit-transform:translate(0,-50%);
           transform:translate(0,-50%);
 }
