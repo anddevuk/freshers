@@ -1,351 +1,179 @@
-(function($) {
-    var supportedCSS,supportedCSSOrigin, styles=document.getElementsByTagName("head")[0].style,toCheck="transformProperty WebkitTransform OTransform msTransform MozTransform".split(" ");
-    for (var a = 0; a < toCheck.length; a++) if (styles[toCheck[a]] !== undefined) { supportedCSS = toCheck[a]; }
-    if (supportedCSS) {
-      supportedCSSOrigin = supportedCSS.replace(/[tT]ransform/,"TransformOrigin");
-      if (supportedCSSOrigin[0] == "T") supportedCSSOrigin[0] = "t";
-    }
 
-    // Bad eval to preven google closure to remove it from code o_O
-    eval('IE = "v"=="\v"');
 
-    jQuery.fn.extend({
-        rotate:function(parameters)
-        {
-          if (this.length===0||typeof parameters=="undefined") return;
-          if (typeof parameters=="number") parameters={angle:parameters};
-          var returned=[];
-          for (var i=0,i0=this.length;i<i0;i++)
-          {
-            var element=this.get(i);
-            if (!element.Wilq32 || !element.Wilq32.PhotoEffect) {
+var padding = {top:20, right:40, bottom:0, left:0},
+w = 500 - padding.left - padding.right,
+h = 500 - padding.top  - padding.bottom,
+r = Math.min(w, h)/2,
+rotation = 0,
+oldrotation = 0,
+picked = 100000,
+oldpick = [],
+color = d3.scale.category20();//category20c()
+//randomNumbers = getRandomNumbers();
 
-              var paramClone = $.extend(true, {}, parameters);
-              var newRotObject = new Wilq32.PhotoEffect(element,paramClone)._rootObj;
+//http://osric.com/bingo-card-generator/?title=HTML+and+CSS+BINGO!&words=padding%2Cfont-family%2Ccolor%2Cfont-weight%2Cfont-size%2Cbackground-color%2Cnesting%2Cbottom%2Csans-serif%2Cperiod%2Cpound+sign%2C%EF%B9%A4body%EF%B9%A5%2C%EF%B9%A4ul%EF%B9%A5%2C%EF%B9%A4h1%EF%B9%A5%2Cmargin%2C%3C++%3E%2C{+}%2C%EF%B9%A4p%EF%B9%A5%2C%EF%B9%A4!DOCTYPE+html%EF%B9%A5%2C%EF%B9%A4head%EF%B9%A5%2Ccolon%2C%EF%B9%A4style%EF%B9%A5%2C.html%2CHTML%2CCSS%2CJavaScript%2Cborder&freespace=true&freespaceValue=Web+Design+Master&freespaceRandom=false&width=5&height=5&number=35#results
 
-              returned.push($(newRotObject));
-            }
-            else {
-              element.Wilq32.PhotoEffect._handleRotation(parameters);
-            }
-          }
-          return returned;
-        },
-        getRotateAngle: function(){
-          var ret = [0];
-          for (var i=0,i0=this.length;i<i0;i++)
-          {
-            var element=this.get(i);
-            if (element.Wilq32 && element.Wilq32.PhotoEffect) {
-              ret[i] = element.Wilq32.PhotoEffect._angle;
-            }
-          }
-          return ret;
-        },
-        stopRotate: function(){
-          for (var i=0,i0=this.length;i<i0;i++)
-          {
-            var element=this.get(i);
-            if (element.Wilq32 && element.Wilq32.PhotoEffect) {
-              clearTimeout(element.Wilq32.PhotoEffect._timer);
-            }
-          }
-        }
+var data = [
+        {"label":"Prize 1",  "value":1,  "question":"You've Won a Free Pint!"}, // padding
+        {"label":"Prize 2",  "value":1,  "question":"You've Won a Free Shot!"}, //font-family
+        {"label":"Prize 3",  "value":1,  "question":"You've Won a Free Gift!"}, //color
+        {"label":"Prize 4",  "value":1,  "question":"You've Won a Free Shot!"}, //font-weight
+        {"label":"Prize 5",  "value":1,  "question":"You've Won a Free Pint!"}, //font-size
+        {"label":"Prize 6",  "value":1,  "question":"You've Won a Free Gift!"}, //background-color
+        {"label":"Prize 7",  "value":1,  "question":"You've Won a Free Gift!"}, //nesting
+        {"label":"Prize 8",  "value":1,  "question":"You've Won a Free Pint!"}, //bottom
+        {"label":"Prize 9",  "value":1,  "question":"You've Won a Free Gift!"}, //sans-serif
+        {"label":"Prize 10", "value":1, "question":"You've Won a Free T-Shirt!"}, //period
+        {"label":"Prize 11", "value":1, "question":"You've Won a Free Pint!"}, //pound sign
+        {"label":"Prize 12", "value":1, "question":"You've Won a Free Shot!"}, //<body>
+        {"label":"Prize 13", "value":1, "question":"You've Won a Free T-Shirt!"}, //<ul>
+        {"label":"Prize 14", "value":1, "question":"You've Won a Free Shot!"}, //<h1>
+        {"label":"Prize 15", "value":1, "question":"You've Won a Free Pint!"}, //margin
+        {"label":"Prize 16", "value":1, "question":"You've Won a Free T-Shirt!"}, //< >
+        {"label":"Prize 17", "value":1, "question":"You've Won a Free Gift!"}, // { }
+        {"label":"Prize 18", "value":1, "question":"You've Won a Free Shot!"}, //<p>
+];
+
+
+var svg = d3.select('#chart')
+.append("svg")
+.data([data])
+.attr("width",  w + padding.left + padding.right)
+.attr("height", h + padding.top + padding.bottom);
+
+var container = svg.append("g")
+.attr("class", "chartholder")
+.attr("transform", "translate(" + (w/2 + padding.left) + "," + (h/2 + padding.top) + ")");
+
+var vis = container
+.append("g");
+
+var pie = d3.layout.pie().sort(null).value(function(d){return 1;});
+
+// declare an arc generator function
+var arc = d3.svg.arc().outerRadius(r);
+
+// select paths, use arc generator to draw
+var arcs = vis.selectAll("g.slice")
+.data(pie)
+.enter()
+.append("g")
+.attr("class", "slice");
+
+
+arcs.append("path")
+.attr("fill", function(d, i){ return color(i); })
+.attr("d", function (d) { return arc(d); });
+
+// add the text
+arcs.append("text").attr("transform", function(d){
+    d.innerRadius = 0;
+    d.outerRadius = r;
+    d.angle = (d.startAngle + d.endAngle)/2;
+    return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius -10) +")";
+})
+.attr("text-anchor", "end")
+.text( function(d, i) {
+    return data[i].label;
+});
+
+container.on("click", spin);
+
+
+function spin(d){
+
+container.on("click", null);
+
+//all slices have been seen, all done
+console.log("OldPick: " + oldpick.length, "Data length: " + data.length);
+if(oldpick.length == data.length){
+    console.log("done");
+    container.on("click", null);
+    return;
+}
+
+var  ps       = 360/data.length,
+     pieslice = Math.round(1440/data.length),
+     rng      = Math.floor((Math.random() * 1440) + 360);
+    
+rotation = (Math.round(rng / ps) * ps);
+
+picked = Math.round(data.length - (rotation % 360)/ps);
+picked = picked >= data.length ? (picked % data.length) : picked;
+
+
+if(oldpick.indexOf(picked) !== -1){
+    d3.select(this).call(spin);
+    return;
+} else {
+    oldpick.push(picked);
+}
+
+rotation += 90 - Math.round(ps/2);
+
+vis.transition()
+    .duration(3000)
+    .attrTween("transform", rotTween)
+    .each("end", function(){
+
+        //mark question as seen
+        d3.select(".slice:nth-child(" + (picked + 1) + ") path")
+            .attr("fill", "#111");
+
+        //populate question
+        d3.select("#question h1")
+            .text(data[picked].question);
+
+        oldrotation = rotation;
+    
+        container.on("click", spin);
     });
+}
 
-    // Library agnostic interface
+//make arrow
+svg.append("g")
+.attr("transform", "translate(" + (w + padding.left + padding.right) + "," + ((h/2)+padding.top) + ")")
+.append("path")
+.attr("d", "M-" + (r*.15) + ",0L0," + (r*.05) + "L0,-" + (r*.05) + "Z")
+.style({"fill":"black"});
 
-    Wilq32=window.Wilq32||{};
-    Wilq32.PhotoEffect=(function(){
+//draw spin circle
+container.append("circle")
+.attr("cx", 0)
+.attr("cy", 0)
+.attr("r", 60)
+.style({"fill":"white","cursor":"pointer"});
 
-      if (supportedCSS) {
-        return function(img,parameters){
-          img.Wilq32 = {
-            PhotoEffect: this
-          };
-
-          this._img = this._rootObj = this._eventObj = img;
-          this._handleRotation(parameters);
-        }
-      } else {
-        return function(img,parameters) {
-          this._img = img;
-          this._onLoadDelegate = [parameters];
-
-          this._rootObj=document.createElement('span');
-          this._rootObj.style.display="inline-block";
-          this._rootObj.Wilq32 =
-            {
-              PhotoEffect: this
-            };
-          img.parentNode.insertBefore(this._rootObj,img);
-
-          if (img.complete) {
-            this._Loader();
-          } else {
-            var self=this;
-            // TODO: Remove jQuery dependency
-            jQuery(this._img).bind("load", function(){ self._Loader(); });
-          }
-        }
-      }
-    })();
-
-    Wilq32.PhotoEffect.prototype = {
-      _setupParameters : function (parameters){
-        this._parameters = this._parameters || {};
-        if (typeof this._angle !== "number") { this._angle = 0 ; }
-        if (typeof parameters.angle==="number") { this._angle = parameters.angle; }
-        this._parameters.animateTo = (typeof parameters.animateTo === "number") ? (parameters.animateTo) : (this._angle);
-
-        this._parameters.step = parameters.step || this._parameters.step || null;
-        this._parameters.easing = parameters.easing || this._parameters.easing || this._defaultEasing;
-        this._parameters.duration = 'duration' in parameters ? parameters.duration : parameters.duration || this._parameters.duration || 1000;
-        this._parameters.callback = parameters.callback || this._parameters.callback || this._emptyFunction;
-        this._parameters.center = parameters.center || this._parameters.center || ["50%","50%"];
-        if (typeof this._parameters.center[0] == "string") {
-          this._rotationCenterX = (parseInt(this._parameters.center[0],10) / 100) * this._imgWidth * this._aspectW;
-        } else {
-          this._rotationCenterX = this._parameters.center[0];
-        }
-        if (typeof this._parameters.center[1] == "string") {
-          this._rotationCenterY = (parseInt(this._parameters.center[1],10) / 100) * this._imgHeight * this._aspectH;
-        } else {
-          this._rotationCenterY = this._parameters.center[1];
-        }
-
-        if (parameters.bind && parameters.bind != this._parameters.bind) { this._BindEvents(parameters.bind); }
-      },
-      _emptyFunction: function(){},
-      _defaultEasing: function (x, t, b, c, d) { return -c * ((t=t/d-1)*t*t*t - 1) + b },
-      _handleRotation : function(parameters, dontcheck){
-        if (!supportedCSS && !this._img.complete && !dontcheck) {
-          this._onLoadDelegate.push(parameters);
-          return;
-        }
-        this._setupParameters(parameters);
-        if (this._angle==this._parameters.animateTo) {
-          this._rotate(this._angle);
-        }
-        else {
-          this._animateStart();
-        }
-      },
-
-      _BindEvents:function(events){
-        if (events && this._eventObj)
-        {
-          // Unbinding previous Events
-          if (this._parameters.bind){
-            var oldEvents = this._parameters.bind;
-            for (var a in oldEvents) if (oldEvents.hasOwnProperty(a))
-              // TODO: Remove jQuery dependency
-              jQuery(this._eventObj).unbind(a,oldEvents[a]);
-          }
-
-        this._parameters.bind = events;
-        for (var a in events) if (events.hasOwnProperty(a))
-          // TODO: Remove jQuery dependency
-          jQuery(this._eventObj).bind(a,events[a]);
-        }
-      },
-
-      _Loader:(function()
-      {
-        if (IE)
-          return function() {
-            var width=this._img.width;
-            var height=this._img.height;
-            this._imgWidth = width;
-            this._imgHeight = height;
-            this._img.parentNode.removeChild(this._img);
-
-            this._vimage = this.createVMLNode('image');
-            this._vimage.src=this._img.src;
-            this._vimage.style.height=height+"px";
-            this._vimage.style.width=width+"px";
-            this._vimage.style.position="absolute"; // FIXES IE PROBLEM - its only rendered if its on absolute position!
-            this._vimage.style.top = "0px";
-            this._vimage.style.left = "0px";
-            this._aspectW = this._aspectH = 1;
-
-            /* Group minifying a small 1px precision problem when rotating object */
-            this._container = this.createVMLNode('group');
-            this._container.style.width=width;
-            this._container.style.height=height;
-            this._container.style.position="absolute";
-            this._container.style.top="0px";
-            this._container.style.left="0px";
-            this._container.setAttribute('coordsize',width-1+','+(height-1)); // This -1, -1 trying to fix ugly problem with small displacement on IE
-            this._container.appendChild(this._vimage);
-
-            this._rootObj.appendChild(this._container);
-            this._rootObj.style.position="relative"; // FIXES IE PROBLEM
-            this._rootObj.style.width=width+"px";
-            this._rootObj.style.height=height+"px";
-            this._rootObj.setAttribute('id',this._img.getAttribute('id'));
-            this._rootObj.className=this._img.className;
-            this._eventObj = this._rootObj;
-            var parameters;
-            while (parameters = this._onLoadDelegate.shift()) {
-              this._handleRotation(parameters, true);
-            }
-          }
-          else return function () {
-            this._rootObj.setAttribute('id',this._img.getAttribute('id'));
-            this._rootObj.className=this._img.className;
-
-            this._imgWidth=this._img.naturalWidth;
-            this._imgHeight=this._img.naturalHeight;
-            var _widthMax=Math.sqrt((this._imgHeight)*(this._imgHeight) + (this._imgWidth) * (this._imgWidth));
-            this._width = _widthMax * 3;
-            this._height = _widthMax * 3;
-
-            this._aspectW = this._img.offsetWidth/this._img.naturalWidth;
-            this._aspectH = this._img.offsetHeight/this._img.naturalHeight;
-
-            this._img.parentNode.removeChild(this._img);
+//spin text
+container.append("text")
+.attr("x", 0)
+.attr("y", 15)
+.attr("text-anchor", "middle")
+.text("SPIN")
+.style({"font-weight":"bold", "font-size":"30px"});
 
 
-            this._canvas=document.createElement('canvas');
-            this._canvas.setAttribute('width',this._width);
-            this._canvas.style.position="relative";
-            this._canvas.style.left = -this._img.height * this._aspectW + "px";
-            this._canvas.style.top = -this._img.width * this._aspectH + "px";
-            this._canvas.Wilq32 = this._rootObj.Wilq32;
-
-            this._rootObj.appendChild(this._canvas);
-            this._rootObj.style.width=this._img.width*this._aspectW+"px";
-            this._rootObj.style.height=this._img.height*this._aspectH+"px";
-            this._eventObj = this._canvas;
-
-            this._cnv=this._canvas.getContext('2d');
-            var parameters;
-            while (parameters = this._onLoadDelegate.shift()) {
-              this._handleRotation(parameters, true);
-            }
-          }
-      })(),
-
-      _animateStart:function()
-      {
-        if (this._timer) {
-          clearTimeout(this._timer);
-        }
-        this._animateStartTime = +new Date;
-        this._animateStartAngle = this._angle;
-        this._animate();
-      },
-      _animate:function()
-      {
-        var actualTime = +new Date;
-        var checkEnd = actualTime - this._animateStartTime > this._parameters.duration;
-
-        // TODO: Bug for animatedGif for static rotation ? (to test)
-        if (checkEnd && !this._parameters.animatedGif)
-        {
-          clearTimeout(this._timer);
-        }
-        else
-        {
-          if (this._canvas||this._vimage||this._img) {
-            var angle = this._parameters.easing(0, actualTime - this._animateStartTime, this._animateStartAngle, this._parameters.animateTo - this._animateStartAngle, this._parameters.duration);
-            this._rotate((~~(angle*10))/10);
-          }
-          if (this._parameters.step) {
-            this._parameters.step(this._angle);
-          }
-          var self = this;
-          this._timer = setTimeout(function()
-          {
-            self._animate.call(self);
-          }, 10);
-        }
-
-      // To fix Bug that prevents using recursive function in callback I moved this function to back
-      if (this._parameters.callback && checkEnd){
-        this._angle = this._parameters.animateTo;
-        this._rotate(this._angle);
-        this._parameters.callback.call(this._rootObj);
-      }
-      },
-
-      _rotate : (function()
-      {
-        var rad = Math.PI/180;
-        if (IE)
-          return function(angle)
-        {
-          this._angle = angle;
-          this._container.style.rotation=(angle%360)+"deg";
-          this._vimage.style.top = -(this._rotationCenterY - this._imgHeight/2) + "px";
-          this._vimage.style.left = -(this._rotationCenterX - this._imgWidth/2) + "px";
-          this._container.style.top = this._rotationCenterY - this._imgHeight/2 + "px";
-          this._container.style.left = this._rotationCenterX - this._imgWidth/2 + "px";
-
-        }
-          else if (supportedCSS)
-          return function(angle){
-            this._angle = angle;
-            this._img.style[supportedCSS]="rotate("+(angle%360)+"deg)";
-            this._img.style[supportedCSSOrigin]=this._parameters.center.join(" ");
-          }
-          else
-            return function(angle)
-          {
-            this._angle = angle;
-            angle=(angle%360)* rad;
-            // clear canvas
-            this._canvas.width = this._width;//+this._widthAdd;
-            this._canvas.height = this._height;//+this._heightAdd;
-
-            // REMEMBER: all drawings are read from backwards.. so first function is translate, then rotate, then translate, translate..
-            this._cnv.translate(this._imgWidth*this._aspectW,this._imgHeight*this._aspectH);	// at least center image on screen
-            this._cnv.translate(this._rotationCenterX,this._rotationCenterY);			// we move image back to its orginal
-            this._cnv.rotate(angle);										// rotate image
-            this._cnv.translate(-this._rotationCenterX,-this._rotationCenterY);		// move image to its center, so we can rotate around its center
-            this._cnv.scale(this._aspectW,this._aspectH); // SCALE - if needed ;)
-            this._cnv.drawImage(this._img, 0, 0);							// First - we draw image
-          }
-
-      })()
-      }
-
-      if (IE)
-      {
-        Wilq32.PhotoEffect.prototype.createVMLNode=(function(){
-          document.createStyleSheet().addRule(".rvml", "behavior:url(#default#VML)");
-          try {
-            !document.namespaces.rvml && document.namespaces.add("rvml", "urn:schemas-microsoft-com:vml");
-            return function (tagName) {
-              return document.createElement('<rvml:' + tagName + ' class="rvml">');
-            };
-          } catch (e) {
-            return function (tagName) {
-              return document.createElement('<' + tagName + ' xmlns="urn:schemas-microsoft.com:vml" class="rvml">');
-            };
-          }
-        })();
-      }
-
-})(jQuery);
+function rotTween(to) {
+var i = d3.interpolate(oldrotation % 360, rotation);
+return function(t) {
+return "rotate(" + i(t) + ")";
+};
+}
 
 
-$(".button").click(function(){
-    var spin = (Math.floor((Math.random() * 10) + 1)) * 72;
-  
-  
-                     $(".wheel").rotate({
-                          angle: 0,
-                          animateTo: 1720 + spin,
-                          duration: 12000
-                      });
-                      setTimeout(function(){
-                          $(".wheel").stopRotate();
-                      }, 12000);
-            
-     // $(this).removeClass("wheel-" + spin);
-    // console.log(spin);
-    // $(".wheel").addClass("wheel-" + spin);
-    // $(".wheel").css({"tra": "yellow", "font-size": "200%"});
-}); 
+function getRandomNumbers(){
+var array = new Uint16Array(1000);
+var scale = d3.scale.linear().range([360, 1440]).domain([0, 100000]);
+
+if(window.hasOwnProperty("crypto") && typeof window.crypto.getRandomValues === "function"){
+    window.crypto.getRandomValues(array);
+    console.log("works");
+} else {
+    //no support for crypto, get crappy random numbers
+    for(var i=0; i < 1000; i++){
+        array[i] = Math.floor(Math.random() * 100000) + 1;
+    }
+}
+
+return array;
+}
