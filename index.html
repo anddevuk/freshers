@@ -2,94 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOHO</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Allerta+Stencil&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <!--Custom CSS-->
-    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/utilities.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/grid.css">
-    <link rel="stylesheet" href="css/menu.css">
+    <title>Spin & Win</title>
 </head>
 <body>
-    <div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v11.0" nonce="pbFlNoKh"></script>
-    <header class="site-header">
-        <div class="container">
-            <div class="row">
-                <div class="col12 logo">
-                    <h1 class="brand">
-                        <a href=""><img src="Images/logo.png"></a>
-                    </h1>
-                </div>
-            </div>
+    <header>
+        <div class="overlay">
+            <h1>Freshers Fair 2021</h1>
+            <br>
         </div>
     </header>
-    <section class="section" id="about">
+    <section class="stats">
         <div class="container">
-            <div class="row">
-                <div class="col12">
-                    <header class="section-header">
-                        <h1 class="section-title site-title text-center">Welcome To SOHO</h1>
-                        <p class="lead text-center">Use the below navigational buttons to view drinks, cocktails and more</p>
-                    </header>
+            <div class="wrapper">
+                <div class="pointer-wrapper">
+                    <img src="https://register.flybuys.com.au/cdn/edm/library/assets/2017_07/wheel-pointer-v2.png" alt="pointer">
                 </div>
-                <div class="col6">   
-                    <button class="bubbly-button" onclick="delay('cocktails.html')">COCKTAILS</button>
-                    <!-- <li><button class="bubbly-button" onclick="delay('offersevents.html')">OFFERS & EVENTS</button></li> -->
-                </div>
-                <div class="col6">   
-                    <button class="bubbly-button" onclick="delay('drinks.html')">DRINKS</button>
-                    <!-- <li><button class="bubbly-button" onclick="delay('offersevents.html')">OFFERS & EVENTS</button></li> -->
-                </div>
-                <div class="col6">   
-                    <button class="bubbly-button" onclick="delay('venuehire.html')">VENUE HIRE</button>
-                </div>
-                <div class="col6">   
-                    <button class="bubbly-button" onclick="delay('other.html')">OTHER</button>
-                    <!-- <li><button class="bubbly-button" onclick="delay('offersevents.html')">OFFERS & EVENTS</button></li> -->
-                </div>
+                <img src="spinning.png" alt="spping wheel" class="wheel">
             </div>
+            <!-- <div class="button">
+                <button class="btn">Spin</button>
+            </div> -->
+            <div class='cont'>
+                <button class='button'>
+                   <div class='blob'>
+                      <svg
+                      xmlns:xlink='http://www.w3.org/1999/xlink'
+                      version='1.1'
+                      xmlns='http://www.w3.org/2000/svg'
+                      viewBox='0 0 310 350'>
+                      <path d='M156.4,339.5c31.8-2.5,59.4-26.8,80.2-48.5c28.3-29.5,40.5-47,56.1-85.1c14-34.3,20.7-75.6,2.3-111  c-18.1-34.8-55.7-58-90.4-72.3c-11.7-4.8-24.1-8.8-36.8-11.5l-0.9-0.9l-0.6,0.6c-27.7-5.8-56.6-6-82.4,3c-38.8,13.6-64,48.8-66.8,90.3c-3,43.9,17.8,88.3,33.7,128.8c5.3,13.5,10.4,27.1,14.9,40.9C77.5,309.9,111,343,156.4,339.5z' />
+                      </svg>
+                    </div>
+                    <div class='line'></div>
+                    <div class='text'>
+                      <p>S</p>
+                      <p>P</p>
+                      <p>I</p>
+                      <p>N</p>
+                      <p>!</p>
+                    </div>
+                  </button>               
+              </div>
         </div>
+
     </section>
-    <section class="section">
-        <div class="fb-page" data-href="https://www.facebook.com/SohoLVPL" data-tabs="timeline" data-width="500" data-height="" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"><blockquote cite="https://www.facebook.com/SohoLVPL" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/SohoLVPL">Soho Liverpool</a></blockquote></div>
-    </section>
-    <section class="section" id="contact">
-        <div class="container">
-            <div class="row">
-                <div class="col12">
-                    <header class="section-header">
-                        <h1 class="section-title text-center">Contact SOHO</h1>
-                        <p class="lead text-center">For any questions ask a member of staff, or use one of the below contact details.
-                        </p>
-                        </header>
-                        <ul class="list-inline text-center">
-                            <li class="list-inline-item"><i class="fa fa-map-marker"></i>Liverpool City</li>
-                            <li class="list-inline-item"><i class="fa fa-phone"></i>0151 305 2412</li>
-                            <li class="list-inline-item"><i class="fa fa-envelope"></i>info@soholiverpool.co.uk</li>
-                        </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-    <footer class="site-footer">
-        <div class="container">
-            <div class="row">
-                <div class="col12 text-center">
-                    Copyright &copy; 2021 SOHO Liverpool. All Rights Reserved
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!--SCRIPTS-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/buttons.js"></script>
+    <script src="jquery-3.6.0.min.js"></script>
+    <script src="jquery.popupoverlay.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
