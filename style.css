@@ -369,3 +369,42 @@ i {
   color: #2867B2;
   margin-top: 1vw;
 }
+
+@media (max-width:768px) {
+  .cont {
+      max-width:50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+  .line {
+    position: absolute;
+    bottom: 40%;
+    width: 120vw;
+    height: 0.5vw;
+    background: white;
+    transform: rotate(-8deg);
+    box-shadow: 2px 2px 0px black;
+    animation: line 4s ease infinite reverse;
+  }
+  .text {
+    display: flex;
+    position: absolute;
+    top: -3%;
+    font-size: 4vw;
+    text-shadow: 2px 2px black;
+    font-family: 'Anton', sans-serif;
+  }
+  .pointer-wrapper {
+    position: absolute;
+    top: -35px;
+    left: 45%;
+    z-index: 1;
+  }
+  .wheel {
+    width:80%;
+    margin:0 auto;
+    display:flex;
+    justify-content: center;
+  }
+}
