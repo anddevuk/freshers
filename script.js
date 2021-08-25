@@ -1,6 +1,6 @@
 let theWheel = new Winwheel({
     'numSegments'       : 8,                 // Specify number of segments.
-    'outerRadius'       : 100,               // Set outer radius so wheel fits inside the background.
+    'outerRadius'       : 200,               // Set outer radius so wheel fits inside the background.
     'drawText'          : true,              // Code drawn text can be used with segment images.
     'textFontSize'      : 16,
     'textOrientation'   : 'curved',
