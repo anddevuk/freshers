@@ -1,9 +1,9 @@
 <html>
     <head>
-        <title>Winning Wheel</title>
+        <title>HTML5 Canvas Winning Wheel</title>
         <link rel="stylesheet" href="style.css" type="text/css" />
         <script type="text/javascript" src="Winwheel.js"></script>
-        <script src="TweenMax.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
     </head>
     <body>
         <div class="container">
@@ -13,15 +13,15 @@
                     <hr>
                 </div>
                 <div class="titles">
-                    <h1 class="title">Spin To Win!</h1>
+                    <img src="title.png" alt="" srcset="">
                 </div>
             </div>
         </div>
-        <div class="container">
+        <div class="container wheel-sect">
             <div align="center">
                 <table cellpadding="0" cellspacing="0" border="0">
                     <tr>
-                        <td width="600" height="800" class="the_wheel" align="center" valign="center">
+                        <td class="the_wheel" align="center" valign="center">
                             <canvas id="canvas" width="600" height="600">
                                 <p style="color: white" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
                             </canvas>
@@ -39,11 +39,6 @@
                 <br /><br />
             </div>
         </div>
-        <script type="text/javascript">
-            window.onbeforeunload = function() {
-                return "You may only spin this wheel once!";
-            }
-        </script>
         <script src="script.js"></script>
     </body>
 </html>
