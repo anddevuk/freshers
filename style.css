@@ -1,9 +1,9 @@
-body
-{
+body {
     font-family: arial;
-    background: url(bg.jpg);
+    background: url(7.jpg);
     background-position: center;
     background-repeat: no-repeat;
+    background-size: cover;
 }
 .logo-sect {
     text-align: center;
@@ -17,14 +17,12 @@ body
     margin:0 auto;
 }
 /* Sets the background image for the wheel */
-td.the_wheel
-{
-    background-image: url(wheel_back.png);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
 
+.wheel-sect {
+    background-image: url(./wheel_back.png);
+    background-position: center;
+    background-size: 135%;
+}
 /* Do some css reset on selected elements */
 h1, p
 {
@@ -52,10 +50,12 @@ h1, p
     justify-content: center;
 }
 
-@media only screen and (max-width: 600px) {
-    #canvas {
-      width:100px;
-      height:600px;
-      margin-top:20px;
+td.the_wheel {
+    width:800px; 
+    height:800px;
+}
+@media only screen and (max-width: 768px) {
+    .titles {
+       margin-top:130px;
     }
   }
